@@ -53,4 +53,21 @@ public class SocksController {
         }
     }
 
+    @GetMapping
+    public ResponseEntity<String> getSocksByParams(
+            @RequestParam String color,
+            @RequestParam int size,
+            @RequestParam(
+                    value = "cottonmin",
+                    defaultValue = "0"
+            ) int cottonMin,
+            @RequestParam(
+                    value = "cottonmax",
+                    defaultValue = "100"
+            ) int cottonMax)
+    {
+
+        return ResponseEntity.ok(cottonMax + " " + cottonMin);
+    }
+
 }
