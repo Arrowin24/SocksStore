@@ -11,4 +11,6 @@ public interface SocksService {
     int deleteSocks(SocksOrder order);
 
     String messageOfResidual(Socks socks);
+
+    int getSocksQuantityByParams(String color, int size, int cottonMin, int cottonMax);
 }

@@ -20,7 +20,8 @@ public class Socks {
 
     private Color color;
     private Size size;
-    @Min(1) @Max(100)
+    @Min(1)
+    @Max(100)
     private int cottonPart;
 
 
@@ -35,12 +36,11 @@ public class Socks {
         setCottonPart(cottonPart);
     }
 
-    private enum Color {
-        BLACK, WHITE, RED, ORANGE, YELLOW, GREEN, BLUE;
+    public enum Color {
+        BLACK, WHITE, RED, ORANGE, YELLOW, GREEN, BLUE
     }
 
-
-    private enum Size {
+    public enum Size {
         SIZE_26(26), SIZE_27(27), SIZE_28(28), SIZE_29(29), SIZE_30(30), SIZE_31(31), SIZE_32(32), SIZE_33(33);
 
         private final int size;
