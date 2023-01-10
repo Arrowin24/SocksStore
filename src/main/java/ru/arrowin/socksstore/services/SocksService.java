@@ -2,13 +2,14 @@ package ru.arrowin.socksstore.services;
 
 
 import ru.arrowin.socksstore.model.Socks;
+import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.model.SocksOrder;
 
 public interface SocksService {
 
-    int addSocks(SocksOrder order);
+    int addSocks(SocksConsignment consignment);
 
-    int deleteSocks(SocksOrder order);
+    int deleteSocks(SocksConsignment consignment);
 
     String messageOfResidual(Socks socks);
 

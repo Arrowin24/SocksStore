@@ -2,12 +2,13 @@ package ru.arrowin.socksstore.controllers;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.arrowin.socksstore.model.SocksOrder;
+import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.services.SocksService;
 
 import javax.validation.Valid;
@@ -48,18 +49,16 @@ public class SocksController {
     public ResponseEntity<String> createSocks(
             @Valid
             @RequestBody
-            SocksOrder order)
+            SocksConsignment consignment)
     {
         try {
-            socksService.addSocks(order);
-            String message = socksService.messageOfResidual(order.getSocks());
+            socksService.addSocks(consignment);
+            String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
-
-
     }
 
     @Operation(
@@ -82,13 +81,12 @@ public class SocksController {
     )
     @PutMapping
     public ResponseEntity<String> giveSocks(
-            @Valid
             @RequestBody
-            SocksOrder order)
+            @Valid SocksConsignment consignment)
     {
         try {
-            socksService.deleteSocks(order);
-            String message = socksService.messageOfResidual(order.getSocks());
+            socksService.deleteSocks(consignment);
+            String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
@@ -157,19 +155,16 @@ public class SocksController {
     )
     @DeleteMapping
     public ResponseEntity<String> deleteSocks(
-            @Valid
             @RequestBody
-            SocksOrder order)
+            @Valid SocksConsignment consignment)
     {
         try {
-            socksService.deleteSocks(order);
-            String message = socksService.messageOfResidual(order.getSocks());
+            socksService.deleteSocks(consignment);
+            String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
-
-
 }

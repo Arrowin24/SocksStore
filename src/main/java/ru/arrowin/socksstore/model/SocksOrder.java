@@ -1,35 +1,37 @@
 package ru.arrowin.socksstore.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class SocksOrder {
-    private Socks socks;
-    @Min(1) private int quantity;
 
+    private TypeOrder typeOrder;
+    private SocksConsignment consignment;
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private LocalDate date;
+    @JsonFormat(pattern="HH:mm:ss")
+    private LocalTime time;
 
-    @JsonCreator
-    public SocksOrder(
-            @JsonProperty("socks")
-            Socks socks,
-            @JsonProperty("quantity") int quantity)
-    {
-        this.socks = socks;
-        setQuantity(quantity);
-    }
+    public enum TypeOrder {
+        ADD("Приемка"), SELL("Выдача"), DELETE("Списание");
+        private final String description;
 
-    private void setQuantity(int quantity) {
-        if (quantity > 0) {
-            this.quantity = quantity;
-        } else {
-            throw new IllegalArgumentException();
+        TypeOrder(String description) {
+            this.description = description;
+        }
+        @JsonValue
+        public String getDescription() {
+            return description;
         }
     }
+
 }

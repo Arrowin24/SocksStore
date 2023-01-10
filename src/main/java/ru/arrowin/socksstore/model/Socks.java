@@ -45,7 +45,6 @@ public class Socks {
 
         private final int size;
 
-
         Size(int size) {
             this.size = size;
         }
