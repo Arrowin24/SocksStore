@@ -14,18 +14,25 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class SocksOrder {
 
-    private TypeOrder typeOrder;
+    private Type type;
     private SocksConsignment consignment;
     @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate date;
     @JsonFormat(pattern="HH:mm:ss")
     private LocalTime time;
 
-    public enum TypeOrder {
+    public SocksOrder(Type type, SocksConsignment consignment) {
+        this.type = type;
+        this.consignment = consignment;
+        this.date = LocalDate.now();
+        this.time = LocalTime.now();
+    }
+
+    public enum Type {
         ADD("Приемка"), SELL("Выдача"), DELETE("Списание");
         private final String description;
 
-        TypeOrder(String description) {
+        Type(String description) {
             this.description = description;
         }
         @JsonValue
@@ -33,5 +40,4 @@ public class SocksOrder {
             return description;
         }
     }
-
 }

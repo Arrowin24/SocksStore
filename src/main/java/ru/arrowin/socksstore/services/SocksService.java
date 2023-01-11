@@ -1,9 +1,10 @@
 package ru.arrowin.socksstore.services;
 
 
+import org.springframework.stereotype.Service;
 import ru.arrowin.socksstore.model.Socks;
 import ru.arrowin.socksstore.model.SocksConsignment;
-import ru.arrowin.socksstore.model.SocksOrder;
+
 
 public interface SocksService {
 
@@ -14,4 +15,6 @@ public interface SocksService {
     String messageOfResidual(Socks socks);
 
     int getSocksQuantityByParams(String color, int size, int cottonMin, int cottonMax);
+
+    void uploadSocksStoreFromFile();
 }

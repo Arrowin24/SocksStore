@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.arrowin.socksstore.model.SocksConsignment;
+import ru.arrowin.socksstore.model.SocksOrder;
+import ru.arrowin.socksstore.services.SocksOrderService;
 import ru.arrowin.socksstore.services.SocksService;
 
 import javax.validation.Valid;
@@ -22,9 +24,11 @@ import javax.validation.Valid;
 public class SocksController {
 
     private final SocksService socksService;
+    private final SocksOrderService orderService;
 
-    public SocksController(SocksService socksService) {
+    public SocksController(SocksService socksService, SocksOrderService orderService) {
         this.socksService = socksService;
+        this.orderService = orderService;
     }
 
     @Operation(
@@ -53,6 +57,7 @@ public class SocksController {
     {
         try {
             socksService.addSocks(consignment);
+            orderService.addOrder(consignment, SocksOrder.Type.ADD);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
@@ -86,6 +91,7 @@ public class SocksController {
     {
         try {
             socksService.deleteSocks(consignment);
+            orderService.addOrder(consignment, SocksOrder.Type.SELL);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
@@ -160,6 +166,7 @@ public class SocksController {
     {
         try {
             socksService.deleteSocks(consignment);
+            orderService.addOrder(consignment, SocksOrder.Type.DELETE);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {

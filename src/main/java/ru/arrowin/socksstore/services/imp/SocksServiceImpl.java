@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class SocksServiceImpl implements SocksService {
 
-    private HashMap<Socks, Integer> socksStore = new HashMap<>();
+    private final HashMap<Socks, Integer> socksStore = new HashMap<>();
 
     private final FilesService filesService;
 
@@ -28,7 +28,7 @@ public class SocksServiceImpl implements SocksService {
 
     @PostConstruct
     private void init() {
-        readFromFile();
+        uploadSocksStoreFromFile();
     }
 
     @Override
@@ -71,7 +71,8 @@ public class SocksServiceImpl implements SocksService {
         return quantity;
     }
 
-    private void readFromFile() {
+    @Override
+    public void uploadSocksStoreFromFile() {
         try {
             String json = filesService.readSocksStoreFromFile();
             if (!json.isBlank()) {

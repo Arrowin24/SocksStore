@@ -17,7 +17,6 @@ import java.nio.file.Path;
 public class FilesServiceImpl implements FilesService {
     @Value("${path.to.data.file}") private String dataFilePath;
     @Value("${name.of.order.file}") private String ordersFileName;
-
     @Value("${name.of.socks.store.file}") private String socksStoreFileName;
 
     @PostConstruct
@@ -82,6 +81,10 @@ public class FilesServiceImpl implements FilesService {
     public File getOrdersDataFile() {
         return new File(dataFilePath + "/" + ordersFileName);
     }
+    @Override
+    public File getSocksStoreDataFile() {
+        return new File(dataFilePath + "/" + socksStoreFileName);
+    }
 
     @Override
     public boolean uploadOrdersFile(MultipartFile fromFile) {
@@ -90,6 +93,19 @@ public class FilesServiceImpl implements FilesService {
             return false;
         }
         try (FileOutputStream fos = new FileOutputStream(ordersFile)) {
+            IOUtils.copy(fromFile.getInputStream(), fos);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+    @Override
+    public boolean uploadSocksStoreFile(MultipartFile fromFile) {
+        File socksStoreDataFile = getSocksStoreDataFile();
+        if (!socksStoreDataFile.exists()) {
+            return false;
+        }
+        try (FileOutputStream fos = new FileOutputStream(socksStoreDataFile)) {
             IOUtils.copy(fromFile.getInputStream(), fos);
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,6 +121,26 @@ public class FilesServiceImpl implements FilesService {
             return file;
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public File downloadSocksStoreFile()  {
+        File file = new File(dataFilePath + "/" + socksStoreFileName);
+        if (file.exists()) {
+            return file;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public File downloadOrdersFile()  {
+        File file = new File(dataFilePath + "/" + ordersFileName);
+        if (file.exists()) {
+            return file;
+        } else {
+            return null;
         }
     }
 
