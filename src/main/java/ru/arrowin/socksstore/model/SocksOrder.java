@@ -1,10 +1,10 @@
 package ru.arrowin.socksstore.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.arrowin.socksstore.model.enums.Type;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,16 +28,4 @@ public class SocksOrder {
         this.time = LocalTime.now();
     }
 
-    public enum Type {
-        ADD("Приемка"), SELL("Выдача"), DELETE("Списание");
-        private final String description;
-
-        Type(String description) {
-            this.description = description;
-        }
-        @JsonValue
-        public String getDescription() {
-            return description;
-        }
-    }
 }

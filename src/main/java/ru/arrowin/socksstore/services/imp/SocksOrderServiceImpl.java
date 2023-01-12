@@ -7,6 +7,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
 import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.model.SocksOrder;
+import ru.arrowin.socksstore.model.enums.Type;
 import ru.arrowin.socksstore.services.FilesService;
 import ru.arrowin.socksstore.services.SocksOrderService;
 
@@ -32,7 +33,7 @@ public class SocksOrderServiceImpl implements SocksOrderService {
     }
 
     @Override
-    public void addOrder(SocksConsignment consignment, SocksOrder.Type type) {
+    public void addOrder(SocksConsignment consignment, Type type) {
         SocksOrder order = new SocksOrder(type, consignment);
         orders.add(order);
         saveToFile();

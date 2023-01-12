@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import ru.arrowin.socksstore.model.Socks;
 import ru.arrowin.socksstore.model.SocksConsignment;
+import ru.arrowin.socksstore.model.enums.Color;
 import ru.arrowin.socksstore.services.FilesService;
 import ru.arrowin.socksstore.services.SocksService;
 
@@ -119,7 +120,7 @@ public class SocksServiceImpl implements SocksService {
     }
 
     private boolean equalsColor(String color, Socks socks) {
-        return Socks.Color.valueOf(color.toUpperCase()).equals(socks.getColor());
+        return Color.valueOf(color.toUpperCase()).equals(socks.getColor());
     }
 
     private boolean isCottonPartBetween(int cottonMin, int cottonMax, Socks socks) {

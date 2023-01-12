@@ -9,7 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.arrowin.socksstore.model.SocksConsignment;
-import ru.arrowin.socksstore.model.SocksOrder;
+import ru.arrowin.socksstore.model.enums.Type;
 import ru.arrowin.socksstore.services.SocksOrderService;
 import ru.arrowin.socksstore.services.SocksService;
 
@@ -57,7 +57,7 @@ public class SocksController {
     {
         try {
             socksService.addSocks(consignment);
-            orderService.addOrder(consignment, SocksOrder.Type.ADD);
+            orderService.addOrder(consignment, Type.ADD);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
@@ -91,7 +91,7 @@ public class SocksController {
     {
         try {
             socksService.deleteSocks(consignment);
-            orderService.addOrder(consignment, SocksOrder.Type.SELL);
+            orderService.addOrder(consignment, Type.SELL);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
@@ -166,7 +166,7 @@ public class SocksController {
     {
         try {
             socksService.deleteSocks(consignment);
-            orderService.addOrder(consignment, SocksOrder.Type.DELETE);
+            orderService.addOrder(consignment, Type.DELETE);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
         } catch (IllegalArgumentException e) {
