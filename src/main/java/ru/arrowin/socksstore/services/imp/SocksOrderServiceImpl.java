@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
+import ru.arrowin.socksstore.exceptions.SaveFileException;
 import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.model.SocksOrder;
 import ru.arrowin.socksstore.model.enums.Type;
@@ -33,7 +35,7 @@ public class SocksOrderServiceImpl implements SocksOrderService {
     }
 
     @Override
-    public void addOrder(SocksConsignment consignment, Type type) {
+    public void addOrder(SocksConsignment consignment, Type type) throws SaveFileException {
         SocksOrder order = new SocksOrder(type, consignment);
         orders.add(order);
         saveToFile();
@@ -52,16 +54,18 @@ public class SocksOrderServiceImpl implements SocksOrderService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        } catch (ReadFileException e) {
+            e.printStackTrace();
         }
     }
 
-    private void saveToFile() {
+    private void saveToFile() throws SaveFileException {
         try {
             String json = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(orders);
             filesService.saveOrdersToFile(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new SaveFileException(e.getMessage());
         }
     }
 }

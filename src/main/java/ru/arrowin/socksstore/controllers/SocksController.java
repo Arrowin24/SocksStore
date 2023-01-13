@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.arrowin.socksstore.exceptions.SaveFileException;
 import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.model.enums.Type;
 import ru.arrowin.socksstore.services.SocksOrderService;
@@ -60,7 +61,7 @@ public class SocksController {
             orderService.addOrder(consignment, Type.ADD);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | SaveFileException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
@@ -94,7 +95,7 @@ public class SocksController {
             orderService.addOrder(consignment, Type.SELL);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | SaveFileException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
@@ -169,7 +170,7 @@ public class SocksController {
             orderService.addOrder(consignment, Type.DELETE);
             String message = socksService.messageOfResidual(consignment.getSocks());
             return ResponseEntity.ok(message);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | SaveFileException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }

@@ -2,6 +2,7 @@ package ru.arrowin.socksstore.services;
 
 
 import org.springframework.stereotype.Service;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
 import ru.arrowin.socksstore.model.Socks;
 import ru.arrowin.socksstore.model.SocksConsignment;
 
@@ -16,5 +17,5 @@ public interface SocksService {
 
     int getSocksQuantityByParams(String color, int size, int cottonMin, int cottonMax);
 
-    void uploadSocksStoreFromFile();
+    void uploadSocksStoreFromFile() throws ReadFileException;
 }

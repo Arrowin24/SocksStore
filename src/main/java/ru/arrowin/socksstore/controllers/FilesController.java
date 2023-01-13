@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
 import ru.arrowin.socksstore.services.FilesService;
 import ru.arrowin.socksstore.services.SocksOrderService;
 import ru.arrowin.socksstore.services.SocksService;
@@ -83,7 +84,7 @@ public class FilesController {
             }
     )
     @PostMapping(value = "/import/socksStore", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadSocksStoreFile(@RequestParam MultipartFile file) {
+    public ResponseEntity<Void> uploadSocksStoreFile(@RequestParam MultipartFile file) throws ReadFileException {
         if (filesService.uploadSocksStoreFile(file)) {
             socksService.uploadSocksStoreFromFile();
             return ResponseEntity.ok().build();

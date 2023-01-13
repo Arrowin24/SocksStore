@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
 import ru.arrowin.socksstore.model.Socks;
 import ru.arrowin.socksstore.model.SocksConsignment;
 import ru.arrowin.socksstore.model.enums.Color;
@@ -28,7 +29,7 @@ public class SocksServiceImpl implements SocksService {
     }
 
     @PostConstruct
-    private void init() {
+    private void init() throws ReadFileException {
         uploadSocksStoreFromFile();
     }
 
@@ -73,7 +74,7 @@ public class SocksServiceImpl implements SocksService {
     }
 
     @Override
-    public void uploadSocksStoreFromFile() {
+    public void uploadSocksStoreFromFile() throws ReadFileException {
         try {
             String json = filesService.readSocksStoreFromFile();
             if (!json.isBlank()) {
@@ -85,6 +86,8 @@ public class SocksServiceImpl implements SocksService {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
+        } catch (ReadFileException e) {
+            throw new ReadFileException(e.getMessage());
         }
     }
 

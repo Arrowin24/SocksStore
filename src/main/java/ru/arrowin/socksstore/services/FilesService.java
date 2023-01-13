@@ -2,14 +2,16 @@ package ru.arrowin.socksstore.services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.arrowin.socksstore.exceptions.CreateFileException;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
 
 import java.io.File;
 import java.nio.file.Path;
 
 public interface FilesService {
-    String readOrdersFromFile();
+    String readOrdersFromFile() throws ReadFileException;
 
-    String readSocksStoreFromFile();
+    String readSocksStoreFromFile() throws ReadFileException;
 
     boolean saveOrdersToFile(String json);
 
@@ -23,7 +25,7 @@ public interface FilesService {
 
     boolean uploadSocksStoreFile(MultipartFile fromFile);
 
-    Path createTempFile(String suffix);
+    Path createTempFile(String suffix) throws CreateFileException;
 
     File downloadSocksStoreFile();
 

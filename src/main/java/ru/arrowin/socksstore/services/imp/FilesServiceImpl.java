@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.arrowin.socksstore.exceptions.CreateFileException;
+import ru.arrowin.socksstore.exceptions.ReadFileException;
 import ru.arrowin.socksstore.services.FilesService;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +22,7 @@ public class FilesServiceImpl implements FilesService {
     @Value("${name.of.socks.store.file}") private String socksStoreFileName;
 
     @PostConstruct
-    private void init() {
+    private void init() throws CreateFileException {
         try {
             if (!Files.exists(Path.of(dataFilePath, ordersFileName))) {
                 Files.createFile(Path.of(dataFilePath, ordersFileName));
@@ -30,27 +32,27 @@ public class FilesServiceImpl implements FilesService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new CreateFileException(ordersFileName + " or " + socksStoreFileName);
         }
     }
 
     @Override
-    public String readOrdersFromFile() {
+    public String readOrdersFromFile() throws ReadFileException {
         try {
             return Files.readString(Path.of(dataFilePath, ordersFileName));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new ReadFileException(ordersFileName);
         }
     }
 
     @Override
-    public String readSocksStoreFromFile() {
+    public String readSocksStoreFromFile() throws ReadFileException {
         try {
             return Files.readString(Path.of(dataFilePath, socksStoreFileName));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new ReadFileException(socksStoreFileName);
         }
     }
 
@@ -63,8 +65,11 @@ public class FilesServiceImpl implements FilesService {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } catch (CreateFileException e) {
+            throw new RuntimeException(e);
         }
     }
+
     @Override
     public boolean saveSocksStorageToFile(String json) {
         try {
@@ -74,6 +79,8 @@ public class FilesServiceImpl implements FilesService {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } catch (CreateFileException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,6 +88,7 @@ public class FilesServiceImpl implements FilesService {
     public File getOrdersDataFile() {
         return new File(dataFilePath + "/" + ordersFileName);
     }
+
     @Override
     public File getSocksStoreDataFile() {
         return new File(dataFilePath + "/" + socksStoreFileName);
@@ -99,6 +107,7 @@ public class FilesServiceImpl implements FilesService {
         }
         return true;
     }
+
     @Override
     public boolean uploadSocksStoreFile(MultipartFile fromFile) {
         File socksStoreDataFile = getSocksStoreDataFile();
@@ -114,18 +123,18 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public Path createTempFile(String suffix) {
+    public Path createTempFile(String suffix) throws CreateFileException {
         try {
             Path file = Files.createTempFile(Path.of(dataFilePath), "tempFile", suffix);
             file.toFile().deleteOnExit();
             return file;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CreateFileException("Temp files");
         }
     }
 
     @Override
-    public File downloadSocksStoreFile()  {
+    public File downloadSocksStoreFile() {
         File file = new File(dataFilePath + "/" + socksStoreFileName);
         if (file.exists()) {
             return file;
@@ -135,7 +144,7 @@ public class FilesServiceImpl implements FilesService {
     }
 
     @Override
-    public File downloadOrdersFile()  {
+    public File downloadOrdersFile() {
         File file = new File(dataFilePath + "/" + ordersFileName);
         if (file.exists()) {
             return file;
@@ -144,13 +153,13 @@ public class FilesServiceImpl implements FilesService {
         }
     }
 
-    private void cleanFile(String fileName) {
+    private void cleanFile(String fileName) throws CreateFileException {
         try {
             Files.deleteIfExists(Path.of(dataFilePath, fileName));
             Files.createFile(Path.of(dataFilePath, fileName));
         } catch (IOException e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new CreateFileException(e.getMessage());
         }
     }
 
