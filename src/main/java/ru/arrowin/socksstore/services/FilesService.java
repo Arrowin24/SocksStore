@@ -23,7 +23,7 @@ public interface FilesService {
 
     boolean uploadOrdersFile(MultipartFile fromFile);
 
-    boolean uploadSocksStoreFile(MultipartFile fromFile);
+    boolean uploadSocksStoreFile(MultipartFile fromFile) throws ReadFileException;
 
     Path createTempFile(String suffix) throws CreateFileException;
 

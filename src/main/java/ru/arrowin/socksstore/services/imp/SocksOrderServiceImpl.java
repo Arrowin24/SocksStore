@@ -47,7 +47,8 @@ public class SocksOrderServiceImpl implements SocksOrderService {
         try {
             String json = filesService.readOrdersFromFile();
             if (!json.isBlank()) {
-                orders = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(json, new TypeReference<LinkedList<SocksOrder>>() {
+                ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+                orders = mapper.readValue(json, new TypeReference<LinkedList<SocksOrder>>() {
                 });
 
             }
@@ -61,7 +62,8 @@ public class SocksOrderServiceImpl implements SocksOrderService {
 
     private void saveToFile() throws SaveFileException {
         try {
-            String json = new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(orders);
+            ObjectMapper mapper = new ObjectMapper().registerModule(new JavaTimeModule());
+            String json = mapper.writeValueAsString(orders);
             filesService.saveOrdersToFile(json);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

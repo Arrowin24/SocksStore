@@ -102,14 +102,15 @@ public class FilesServiceImpl implements FilesService {
         }
         try (FileOutputStream fos = new FileOutputStream(ordersFile)) {
             IOUtils.copy(fromFile.getInputStream(), fos);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
     @Override
-    public boolean uploadSocksStoreFile(MultipartFile fromFile) {
+    public boolean uploadSocksStoreFile(MultipartFile fromFile) throws ReadFileException {
         File socksStoreDataFile = getSocksStoreDataFile();
         if (!socksStoreDataFile.exists()) {
             return false;
@@ -118,6 +119,7 @@ public class FilesServiceImpl implements FilesService {
             IOUtils.copy(fromFile.getInputStream(), fos);
         } catch (IOException e) {
             e.printStackTrace();
+            throw new ReadFileException(fromFile.getName());
         }
         return true;
     }
@@ -136,11 +138,11 @@ public class FilesServiceImpl implements FilesService {
     @Override
     public File downloadSocksStoreFile() {
         File file = new File(dataFilePath + "/" + socksStoreFileName);
-        if (file.exists()) {
-            return file;
-        } else {
+        if (!file.exists()) {
             return null;
         }
+        return file;
+
     }
 
     @Override
